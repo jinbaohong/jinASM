@@ -19,20 +19,29 @@ dw 5, 3, 42, 104, 85, 210, 123, 111, 105, 125, 140, 136, 153, 211, 199, 209
 dw 224, 239, 260, 304, 333
 data ends
 
-table segment
-db 21 dup ('year summ ne ?? ')
-table ends
 
 codesg segment
 start:
-	mov ax, table
-	mov es, ax
 	mov ax, data
 	mov ds, ax
 	mov ax, stack
 	mov ss, ax
-
+	mov sp, 16
 	mov si, 0
+	
+	mov cx, 20
+ms:	mov ax, 1
+	mov bx, 1
+	mov dh, ax
+	mov dl, bx
+	push cx
+	mov cl, 2
+	call show_str
+	inc ax
+	inc bx
+	pop cx
+	loop ms
+
 	mov bx, 0
 	mov cx, 21
 s:	mov ax, [bx + 0]
@@ -54,6 +63,41 @@ s:	mov ax, [bx + 0]
 
 	mov ax, 4c00h
 	int 21h
+
+show_str:
+	push es
+	push bx
+	push ax
+
+main:
+	mov ax, 0b800h
+	mov es, ax
+
+	mov al, 0A0h
+	mul dh
+	mov dh, 0
+	add dl, dl
+	add ax, dx	; align screen location at ax
+	mov bx, ax
+
+
+s0:
+	mov di, cx
+	mov cl, [si]
+	mov ch, 0
+	jcxz ok
+	mov byte ptr es:[bx], cl
+	mov cx, di
+	mov byte ptr es:[bx+1], cl
+	inc si
+	add bx, 2
+	jmp short s0
+ok:
+	pop ax
+	pop bx
+	pop es
+	ret
+
 codesg ends
 
 end start

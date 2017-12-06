@@ -7,13 +7,17 @@ stack ends
 code segment
 start:
 	mov ax, stack
-	mov ss, ax
-	mov sp, 20
+	mov ds, ax
+;	mov sp, 20
+	mov ah, 0
+	mov al, 0f0h
+	add al, 88h
 
-	mov ax, 4240h
-	mov dx, 000Fh
-	mov cx, 0Ah
-	call divdw
+
+;	mov ax, 4240h
+;	mov dx, 000Fh
+;	mov cx, 0Ah
+;	call divdw
 	
 	mov ax, 4c00h
 	int 21h
