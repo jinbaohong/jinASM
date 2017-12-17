@@ -10,12 +10,9 @@ start:
 	mov ss, ax
 	mov sp, 20
 
-	mov bx, ax
-	mov cl, 3
-	shl bx, cl
-	shl ax, 1
-	add ax, bx
-
+	mov ah, 2
+	mov al, 3
+	int 7ch
 	mov ax, 4c00h
 	int 21h
 
